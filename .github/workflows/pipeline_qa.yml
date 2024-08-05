@@ -1,0 +1,11 @@
+name: Pipeline QA
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    uses: ./.github/workflows/build_and_sign.yml
+    with:
+      variant: qa

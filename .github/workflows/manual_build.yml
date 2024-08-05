@@ -1,0 +1,21 @@
+name: Android Manual Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      variant:
+        description: 'Variant to build'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - qa
+          - release
+          - debug
+
+jobs:
+  build:
+    uses: ./.github/workflows/build_and_sign.yml
+    with:
+      variant: ${{ github.event.inputs.variant }}
