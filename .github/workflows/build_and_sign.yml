@@ -24,9 +24,6 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Clean Project
-        run: ./gradlew clean
-
       - name: Decode Keystore
         env:
           ENCODED_STRING: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
@@ -34,6 +31,9 @@ jobs:
           TMP_KEYSTORE_FILE_PATH="${RUNNER_TEMP}"/keystore
           mkdir "${TMP_KEYSTORE_FILE_PATH}"
           echo $ENCODED_STRING | base64 -di > "${TMP_KEYSTORE_FILE_PATH}"/keystore.jks
+
+      - name: Clean Project
+        run: ./gradlew clean
 
       - name: Build with Gradle
         run: ./gradlew assemble${{ inputs.variant }}
