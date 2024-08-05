@@ -27,15 +27,11 @@ android {
         release {
             def tmpFilePath = System.getProperty("user.home") + "/work/_temp/keystore/"
             def allFilesFromDir = new File(tmpFilePath).listFiles()
-            println "tmpFilePath =  ${tmpFilePath} \nallFilesFromDir = $allFilesFromDir"
-
             if (allFilesFromDir != null) {
                 def keystoreFile = allFilesFromDir.first()
-                keystoreFile.renameTo("app/keystore/keystore.jks")
+                keystoreFile.renameTo("./app/keystore.jks")
             }
-            println "app = ${new File("./app").list()}"
-            println "keystore = ${new File("./app/keystore").list()}"
-            storeFile = file("keystore/keystore.jks")
+            storeFile = file("keystore.jks")
             storePassword rootProject.ext.getEnvironmentProperty("ANDROID_KEYSTORE_PASSWORD")
             keyAlias rootProject.ext.getEnvironmentProperty("ANDROID_KEY_ALIAS")
             keyPassword rootProject.ext.getEnvironmentProperty("ANDROID_KEY_PASSWORD")
