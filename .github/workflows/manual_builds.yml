@@ -7,7 +7,7 @@ on:
         description: 'Variant to build'
         required: true
         default: 'staging'
-        type: string
+        type: choice
         options:
           - staging
           - qa
