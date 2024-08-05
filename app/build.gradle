@@ -23,6 +23,23 @@ android {
     buildFeatures {
         buildConfig = true
     }
+    signingConfigs {
+        release {
+            def tmpFilePath = System.getProperty("user.home") + "/work/_temp/keystore/"
+            def allFilesFromDir = new File(tmpFilePath).listFiles()
+
+            if (allFilesFromDir != null) {
+
+                def keystoreFile = allFilesFromDir.first()
+                keystoreFile.renameTo("keystore/keystore.jks")
+            }
+
+            storeFile = file("keystore/keystore.jks")
+            storePassword rootProject.ext.getEnvironmentProperty("ANDROID_KEYSTORE_PASSWORD")
+            keyAlias rootProject.ext.getEnvironmentProperty("ANDROID_KEY_ALIAS")
+            keyPassword rootProject.ext.getEnvironmentProperty("ANDROID_KEY_PASSWORD")
+        }
+    }
 
     buildTypes {
         debug {
@@ -34,15 +51,16 @@ android {
             shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField('String', 'TestVariantField', '"Variant Debug"')
+            buildConfigField('String', 'TestVariantField', '"Variant Release"')
+            signingConfig signingConfigs.release
         }
         staging {
             initWith debug
-            buildConfigField ('String', 'TestVariantField', '"Variant Staging"')
+            buildConfigField('String', 'TestVariantField', '"Variant Staging"')
         }
         qa {
             initWith release
-            buildConfigField ('String', 'TestVariantField', '"Variant QA"')
+            buildConfigField('String', 'TestVariantField', '"Variant QA"')
         }
     }
 

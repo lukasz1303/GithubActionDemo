@@ -3,3 +3,29 @@ plugins {
 alias(libs.plugins.android.application) apply false
     alias(libs.plugins.jetbrains.kotlin.android) apply false
 }
+
+project.ext.getEnvironmentProperty = { propertyName ->
+    def name = propertyName.toUpperCase()
+    def systemPropertyValue = System.getenv(name)
+    if (systemPropertyValue != null) {
+        return systemPropertyValue
+    } else {
+        return getLocalProperty(propertyName)
+    }
+}
+
+private def getLocalProperty(String propertyName) {
+    def propertiesFile = rootProject.file('local.properties')
+    if (propertiesFile.exists()) {
+        def properties = new Properties()
+        properties.load(new FileInputStream(propertiesFile))
+        def localPropertyValue = properties.getProperty(propertyName)
+        if (localPropertyValue != null) {
+            return localPropertyValue
+        } else {
+            throw Exception("No property called '" + propertyName + "' exists")
+        }
+    } else {
+        throw Exception("No property called '" + propertyName + "' exists")
+    }
+}
