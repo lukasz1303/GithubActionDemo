@@ -32,9 +32,6 @@ jobs:
         mkdir "${TMP_KEYSTORE_FILE_PATH}"
         echo $ENCODED_STRING | base64 -di > "${TMP_KEYSTORE_FILE_PATH}"/keystore.jks
 
-    - name: Clean Project
-      run: ./gradlew clean
-
     - name: Build with Gradle
       run: ./gradlew assemble${{ inputs.variant }}
       env:
