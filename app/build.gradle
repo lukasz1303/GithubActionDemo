@@ -27,6 +27,7 @@ android {
         release {
             def tmpFilePath = System.getProperty("user.home") + "/work/_temp/keystore/"
             def allFilesFromDir = new File(tmpFilePath).listFiles()
+            println "tmpFilePath =  ${tmpFilePath} \nallFilesFromDir = $allFilesFromDir"
 
             if (allFilesFromDir != null) {
                 def keystoreFile = allFilesFromDir.first()
