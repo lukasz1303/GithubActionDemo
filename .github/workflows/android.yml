@@ -1,23 +1,10 @@
 name: Android CI
 
 on:
-  push:
-    branches: [ "main" ]
+#  push:
+#    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-  workflow_dispatch:
-    inputs:
-      flavor:
-        description: 'Variant to build'
-        required: true
-        default: 'staging'
-        type: choice
-        options:
-          - staging
-          - qa
-          - release
-          - debug
-
 
 jobs:
   build:
@@ -50,12 +37,6 @@ jobs:
         ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
         ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-
-    - name: Upload APK
-      uses: actions/upload-artifact@v3
-      with:
-        name: ${{ github.event.inputs.flavor }}-apk
-        path: app/build/outputs/apk/${{ github.event.inputs.flavor }}/app-${{ github.event.inputs.flavor }}-unsigned.apk
 
     - name: Upload APK
       uses: actions/upload-artifact@v3
