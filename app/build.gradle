@@ -29,9 +29,8 @@ android {
             def allFilesFromDir = new File(tmpFilePath).listFiles()
 
             if (allFilesFromDir != null) {
-
                 def keystoreFile = allFilesFromDir.first()
-                keystoreFile.renameTo("keystore/keystore.jks")
+                keystoreFile.renameTo("app/keystore/keystore.jks")
             }
 
             storeFile = file("keystore/keystore.jks")
