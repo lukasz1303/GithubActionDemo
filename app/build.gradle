@@ -33,6 +33,7 @@ android {
                 def keystoreFile = allFilesFromDir.first()
                 keystoreFile.renameTo("app/keystore/keystore.jks")
             }
+            println "app =  ${new File("/app/").listFiles()} \nkeystore = ${new File("/app/keystore/").listFiles()}"
 
             storeFile = file("keystore/keystore.jks")
             storePassword rootProject.ext.getEnvironmentProperty("ANDROID_KEYSTORE_PASSWORD")
