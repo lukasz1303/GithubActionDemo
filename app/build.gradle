@@ -45,7 +45,7 @@ android {
         debug {
             debuggable true
             buildConfigField('String', 'TestVariantField', '"Variant Debug"')
-
+            signingConfig signingConfigs.release
         }
         release {
             shrinkResources true
@@ -57,10 +57,12 @@ android {
         staging {
             initWith debug
             buildConfigField('String', 'TestVariantField', '"Variant Staging"')
+            signingConfig signingConfigs.release
         }
         qa {
             initWith release
             buildConfigField('String', 'TestVariantField', '"Variant QA"')
+            signingConfig signingConfigs.release
         }
     }
 
