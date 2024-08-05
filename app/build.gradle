@@ -20,12 +20,32 @@ android {
         }
     }
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     buildTypes {
+        debug {
+            debuggable true
+            buildConfigField('String', 'TestVariantField', '"Variant Debug"')
+
+        }
         release {
-            minifyEnabled false
+            shrinkResources true
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField('String', 'TestVariantField', '"Variant Debug"')
+        }
+        staging {
+            initWith debug
+            buildConfigField ('String', 'TestVariantField', '"Variant Staging"')
+        }
+        qa {
+            initWith release
+            buildConfigField ('String', 'TestVariantField', '"Variant QA"')
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
