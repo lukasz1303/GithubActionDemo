@@ -23,7 +23,31 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
-      run: ./gradlew build
+      run: ./gradlew assemble${{ github.event.inputs.flavor }}
+
+
+    - name: Sign APK
+      env:
+        KEYSTORE_PATH: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+        KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+      run: |
+        echo $KEYSTORE_PATH | base64 --decode > keystore.jks
+        apksigner sign --ks keystore.jks --ks-key-alias $KEY_ALIAS --ks-pass pass:$KEYSTORE_PASSWORD --key-pass pass:$KEY_PASSWORD app/build/outputs/apk/${{ github.event.inputs.flavor }}/app-${{ github.event.inputs.flavor }}-unsigned.apk
+
+    - name: Verify APK Signature
+      run: apksigner verify app/build/outputs/apk/${{ github.event.inputs.flavor }}/app-${{ github.event.inputs.flavor }}-unsigned.apk
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ github.event.inputs.flavor }}-apk
+        path: app/build/outputs/apk/${{ github.event.inputs.flavor }}/app-${{ github.event.inputs.flavor }}-unsigned.apk
+
+
+
+
     - name: Upload APK
       uses: actions/upload-artifact@v3
       with:
