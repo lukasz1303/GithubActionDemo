@@ -38,7 +38,7 @@ jobs:
       with:
         gradlePath: app/build.gradle
         versionCode: ''
-        versionCode: ''
+        versionName: '1.0.1'
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
