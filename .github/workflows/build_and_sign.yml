@@ -16,7 +16,7 @@ on:
         required: true
       ANDROID_KEY_PASSWORD:
         required: true
-      G_TOKEN:
+      GITHUB_TOKEN:
         required: true
 
 jobs:
@@ -46,7 +46,7 @@ jobs:
       id: buildnumber
       uses: onyxmueller/build-tag-number@v1
       with:
-        token: ${{secrets.G_TOKEN}}
+        token: ${{secrets.GITHUB_TOKEN}}
 
     - name: Update version code in build.gradle
       run: |
