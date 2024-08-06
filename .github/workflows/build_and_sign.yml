@@ -40,7 +40,7 @@ jobs:
       with:
         gradlePath: app/build.gradle
         versionCode: ''
-        versionName: '1.0.1'
+        versionName: '1.0.2'
 
     - name: Generate build number
       id: buildnumber
