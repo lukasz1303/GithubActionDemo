@@ -28,9 +28,13 @@ android {
             def tmpFilePath = System.getProperty("user.home") + "/work/_temp/keystore/"
             def allFilesFromDir = new File(tmpFilePath).listFiles()
             if (allFilesFromDir != null) {
+                println "root = ${new File(".").list()}"
                 def keystoreFile = allFilesFromDir.first()
                 keystoreFile.renameTo("./app/keystore.jks")
             }
+            println "app = ${new File("./app").list()}"
+            println "keystore = ${new File("./app/keystore").list()}"
+
             storeFile = file("keystore.jks")
             storePassword rootProject.ext.getEnvironmentProperty("ANDROID_KEYSTORE_PASSWORD")
             keyAlias rootProject.ext.getEnvironmentProperty("ANDROID_KEY_ALIAS")
