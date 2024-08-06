@@ -33,13 +33,6 @@ jobs:
     - name: Set up Android SDK
       uses: android-actions/setup-android@v2
 
-    - name: Increment version code
-      uses: chkfung/android-version-actions@v1.2.2
-      with:
-        gradlePath: app/build.gradle
-        versionCode: ''
-        versionName: '1.0.2'
-
     - name: Generate build number
       id: buildnumber
       uses: onyxmueller/build-tag-number@v1

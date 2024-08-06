@@ -5,11 +5,6 @@ on:
     branches: [ "main" ]
 
 jobs:
-  init:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Print Token
-      run: echo ${{ secrets.GITHUB_TOKEN }}
   build:
     uses: ./.github/workflows/build_and_sign.yml
     with:
