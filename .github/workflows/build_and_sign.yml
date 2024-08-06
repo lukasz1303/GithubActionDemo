@@ -18,6 +18,22 @@ on:
         required: true
 
 jobs:
+  initialize:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create version_code.txt
+        run: |
+          echo "${{ inputs.number }}" > version_code.txt
+
+      - name: Upload version code artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: version_code
+          path: version_code.txt
+
   build:
 
     runs-on: ubuntu-latest
