@@ -40,6 +40,19 @@ jobs:
         versionCode: ''
         versionName: '1.0.1'
 
+    - name: Generate build number
+      id: buildnumber
+      uses: onyxmueller/build-tag-number@v1
+      with:
+        token: ${{secrets.github_token}}
+
+      # Now you can pass ${{ steps.buildnumber.outputs.build_number }} to the next steps.
+    - name: Another step as an example
+      run: echo Tag build number ${{ steps.buildnumber.outputs.build_number }}
+    - name: Update version code in build.gradle
+      run: |
+        sed -i "s/versionCode [0-9]\+/versionCode 99/" app/build.gradle
+
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
