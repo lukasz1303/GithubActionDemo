@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
-        text = "Hello ${BuildConfig.TestVariantField} $name!",
+        text = "Hello ${BuildConfig.TestVariantField} $name! VER_CODE=${BuildConfig.VERSION_CODE}",
         modifier = modifier
     )
 }

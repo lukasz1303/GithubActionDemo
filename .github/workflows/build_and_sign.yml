@@ -30,6 +30,29 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
+    - name: Set up Android SDK
+      uses: android-actions/setup-android@v2
+
+    - name: Download version code artifact
+      id: download_version_code
+      uses: actions/download-artifact@v4
+      with:
+        name: version_code
+        path: version_code
+
+    - name: Increment version code
+      id: increment_version_code
+      run: |
+        VERSION_CODE=$(cat version_code/version_code.txt)
+        NEW_VERSION_CODE=$((VERSION_CODE + 1))
+        echo $NEW_VERSION_CODE > version_code/version_code.txt
+        echo "New version code: $NEW_VERSION_CODE"
+        echo "VERSION_CODE=$NEW_VERSION_CODE" >> $GITHUB_ENV
+
+    - name: Update version code in build.gradle
+      run: |
+        sed -i "s/versionCode [0-9]\+/versionCode $VERSION_CODE/" app/build.gradle
+
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
@@ -53,3 +76,9 @@ jobs:
       with:
         name: app-${{ inputs.variant }}-apk
         path: app/build/outputs/apk/${{ inputs.variant }}/*.apk
+
+    - name: Upload updated version code artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: version_code
+        path: version_code/version_code.txt
