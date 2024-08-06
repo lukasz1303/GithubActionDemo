@@ -16,7 +16,7 @@ on:
         required: true
       ANDROID_KEY_PASSWORD:
         required: true
-      GITHUB_TOKEN:
+      G_TOKEN:
         required: true
 
 jobs:
@@ -46,7 +46,7 @@ jobs:
       id: buildnumber
       uses: onyxmueller/build-tag-number@v1
       with:
-        token: ${{secrets.github_token}}
+        token: ${{secrets.G_TOKEN}}
 
       # Now you can pass ${{ steps.buildnumber.outputs.build_number }} to the next steps.
     - name: Another step as an example
