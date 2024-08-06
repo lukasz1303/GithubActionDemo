@@ -33,6 +33,10 @@ jobs:
     - name: Set up Android SDK
       uses: android-actions/setup-android@v2
 
+    - name: Display structure of downloaded files
+      uses: actions/download-artifact@v4
+      run: ls -R
+
     - name: Download version code artifact
       id: download_version_code
       uses: actions/download-artifact@v4
