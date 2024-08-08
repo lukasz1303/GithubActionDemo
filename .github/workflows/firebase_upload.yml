@@ -11,15 +11,17 @@ on:
         description: 'Path to the signed APK'
         required: true
         type: string
-      appId:
-        description: 'Firebase App ID for the selected variant'
-        required: true
-        type: string
     secrets:
-      CREDENTIAL_FILE_CONTENT:
-        required: true
       FIREBASE_STAGING_APP_ID:
         required: false
+      FIREBASE_QA_APP_ID:
+        required: false
+      FIREBASE_RELEASE_APP_ID:
+        required: false
+      FIREBASE_DEBUG_APP_ID:
+        required: false
+      FIREBASE_TOKEN:
+        required: true
 
 jobs:
   upload:
@@ -34,6 +36,25 @@ jobs:
         with:
           name: ${{ inputs.variant }}-apk
           path: ${{ inputs.apk_path }}
+
+      - name: Set Firebase App ID
+        id: set_app_id
+        run: |
+          case ${{ inputs.variant }} in
+            staging)
+              echo "app_id=${{ secrets.FIREBASE_STAGING_APP_ID }}" >> $GITHUB_ENV
+              ;;
+            qa)
+              echo "app_id=${{ secrets.FIREBASE_STAGING_APP_ID }}" >> $GITHUB_ENV
+              ;;
+            debug)
+              echo "app_id=${{ secrets.FIREBASE_DEV_APP_ID }}" >> $GITHUB_ENV
+              ;;
+            *)
+              echo "Unknown variant"
+              exit 1
+              ;;
+          esac
 
       - name: Upload APK to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1

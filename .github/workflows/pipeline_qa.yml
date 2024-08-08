@@ -16,8 +16,5 @@ jobs:
     with:
       variant: qa
       apk_path: app/build/outputs/apk/qa/
-      appId: ${{ secrets.FIREBASE_STAGING_APP_ID }}
-    secrets:
-      FIREBASE_STAGING_APP_ID: ${{ secrets.FIREBASE_STAGING_APP_ID }}
-      CREDENTIAL_FILE_CONTENT: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
+    secrets: inherit
 
