@@ -20,8 +20,12 @@ jobs:
     uses: ./.github/workflows/build_and_sign.yml
     with:
       variant: ${{ github.event.inputs.variant }}
-    secrets:
-      ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
-      ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-      ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-      ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+    secrets: inherit
+
+  upload_to_firebase:
+    needs: build
+    uses: ./.github/workflows/upload_to_firebase.yml
+    with:
+      flavor: ${{ github.event.inputs.variant }}
+      apk_path: app/build/outputs/apk/${{ github.event.inputs.variant }}/release
+    secrets: inherit
