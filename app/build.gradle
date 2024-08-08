@@ -46,6 +46,8 @@ android {
         debug {
             debuggable true
             buildConfigField('String', 'TestVariantField', '"Variant Debug"')
+            applicationIdSuffix = ".dev"
+            versionNameSuffix ' dev'
             signingConfig signingConfigs.release
         }
         release {
@@ -58,11 +60,15 @@ android {
         staging {
             initWith debug
             buildConfigField('String', 'TestVariantField', '"Variant Staging"')
+            applicationIdSuffix = ".staging"
+            versionNameSuffix ' staging'
             signingConfig signingConfigs.release
         }
         qa {
             initWith release
             buildConfigField('String', 'TestVariantField', '"Variant QA"')
+            applicationIdSuffix = ".staging"
+            versionNameSuffix ' qa'
             signingConfig signingConfigs.release
         }
     }
