@@ -16,8 +16,10 @@ on:
         required: true
         type: string
     secrets:
-      FIREBASE_TOKEN:
+      CREDENTIAL_FILE_CONTENT:
         required: true
+      FIREBASE_STAGING_APP_ID:
+        required: false
 
 jobs:
   upload:
