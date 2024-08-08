@@ -20,7 +20,7 @@ on:
         required: false
       FIREBASE_DEBUG_APP_ID:
         required: false
-      FIREBASE_TOKEN:
+      CREDENTIAL_FILE_CONTENT:
         required: true
 
 jobs:
