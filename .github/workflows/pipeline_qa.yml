@@ -10,3 +10,11 @@ jobs:
     with:
       variant: qa
     secrets: inherit
+  upload_to_firebase:
+    needs: build
+    uses: ./.github/workflows/upload_to_firebase.yml
+    with:
+      variant: qa
+      apk_path: app/build/outputs/apk/qa/
+      appId: ${{ secrets.FIREBASE_STAGING_APP_ID }}
+    secrets: inherit
