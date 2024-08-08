@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -46,6 +47,8 @@ android {
         debug {
             debuggable true
             buildConfigField('String', 'TestVariantField', '"Variant Debug"')
+            applicationIdSuffix = ".dev"
+            versionNameSuffix ' dev'
             signingConfig signingConfigs.release
         }
         release {
@@ -58,11 +61,15 @@ android {
         staging {
             initWith debug
             buildConfigField('String', 'TestVariantField', '"Variant Staging"')
+            applicationIdSuffix = ".staging"
+            versionNameSuffix ' staging'
             signingConfig signingConfigs.release
         }
         qa {
             initWith release
             buildConfigField('String', 'TestVariantField', '"Variant QA"')
+            applicationIdSuffix = ".staging"
+            versionNameSuffix ' qa'
             signingConfig signingConfigs.release
         }
     }
@@ -88,6 +95,8 @@ android {
 }
 
 dependencies {
+
+    implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
 
     implementation libs.androidx.core.ktx
     implementation libs.androidx.lifecycle.runtime.ktx

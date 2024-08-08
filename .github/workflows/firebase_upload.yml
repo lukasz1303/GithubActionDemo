@@ -1,0 +1,65 @@
+name: Upload to Firebase
+
+on:
+  workflow_call:
+    inputs:
+      variant:
+        description: 'Version to upload'
+        required: true
+        type: string
+      apk_path:
+        description: 'Path to the signed APK'
+        required: true
+        type: string
+    secrets:
+      FIREBASE_STAGING_APP_ID:
+        required: false
+      FIREBASE_QA_APP_ID:
+        required: false
+      FIREBASE_RELEASE_APP_ID:
+        required: false
+      FIREBASE_DEBUG_APP_ID:
+        required: false
+      CREDENTIAL_FILE_CONTENT:
+        required: true
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download APK artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: app-${{ inputs.variant }}-apk
+          path: ${{ inputs.apk_path }}
+
+      - name: Set Firebase App ID
+        id: set_app_id
+        run: |
+          case ${{ inputs.variant }} in
+            staging)
+              echo "app_id=${{ secrets.FIREBASE_STAGING_APP_ID }}" >> $GITHUB_ENV
+              ;;
+            qa)
+              echo "app_id=${{ secrets.FIREBASE_STAGING_APP_ID }}" >> $GITHUB_ENV
+              ;;
+            debug)
+              echo "app_id=${{ secrets.FIREBASE_DEV_APP_ID }}" >> $GITHUB_ENV
+              ;;
+            *)
+              echo "Unknown variant"
+              exit 1
+              ;;
+          esac
+
+      - name: Upload APK to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ env.app_id }}
+          serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
+          groups: testers
+          file: ${{ inputs.apk_path }}/app-${{ inputs.variant }}.apk
