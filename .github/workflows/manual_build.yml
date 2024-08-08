@@ -26,6 +26,6 @@ jobs:
     needs: build
     uses: ./.github/workflows/firebase_upload.yml
     with:
-      flavor: ${{ github.event.inputs.variant }}
+      variant: ${{ github.event.inputs.variant }}
       apk_path: app/build/outputs/apk/${{ github.event.inputs.variant }}/release
     secrets: inherit
