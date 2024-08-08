@@ -12,7 +12,7 @@ jobs:
     secrets: inherit
   upload_to_firebase:
     needs: build
-    uses: ./.github/workflows/upload_to_firebase.yml
+    uses: ./.github/workflows/firebase_upload.yml
     with:
       variant: qa
       apk_path: app/build/outputs/apk/qa/
