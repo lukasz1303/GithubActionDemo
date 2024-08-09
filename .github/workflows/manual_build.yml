@@ -27,5 +27,5 @@ jobs:
     uses: ./.github/workflows/firebase_upload.yml
     with:
       variant: ${{ github.event.inputs.variant }}
-      apk_path: app/build/outputs/apk/${{ github.event.inputs.variant }}/release
+      apk_path: app/build/outputs/apk/${{ github.event.inputs.variant }}/
     secrets: inherit
