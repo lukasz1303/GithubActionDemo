@@ -9,10 +9,10 @@ on:
         default: 'staging'
         type: choice
         options:
-          - staging
-          - qa
+          - Staging
+          - Qa
           - Release
-          - debug
+          - Debug
 
 
 jobs:

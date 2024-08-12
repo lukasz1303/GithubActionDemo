@@ -31,16 +31,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Convert variant to lowercase
+        id: convert
+        run: echo "variant_lowercase=$(echo '${{ inputs.variant }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
       - name: Download APK artifact
         uses: actions/download-artifact@v4
         with:
-          name: app-${{ inputs.variant }}-apk
+          name: app-${{ env.variant_lowercase }}-apk
           path: ${{ inputs.apk_path }}
 
       - name: Set Firebase App ID
         id: set_app_id
         run: |
-          case ${{ inputs.variant }} in
+          case ${{ env.variant_lowercase }} in
             staging)
               echo "app_id=${{ secrets.FIREBASE_STAGING_APP_ID }}" >> $GITHUB_ENV
               ;;
@@ -62,4 +66,4 @@ jobs:
           appId: ${{ env.app_id }}
           serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
           groups: testers
-          file: ${{ inputs.apk_path }}/app-${{ inputs.variant }}.apk
+          file: ${{ inputs.apk_path }}/app-${{ env.variant_lowercase }}.apk
