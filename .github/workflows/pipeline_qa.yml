@@ -4,17 +4,28 @@ on:
   pull_request:
     branches: [ "main" ]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
+  check:
+    uses: ./.github/workflows/unit_test_and_lint.yml
+    with:
+      variant: Qa
+    secrets: inherit
+
   build:
     uses: ./.github/workflows/build_and_sign.yml
     with:
-      variant: qa
+      variant: Qa
     secrets: inherit
+
   upload_to_firebase:
-    needs: build
+    needs: [ build, check ]
     uses: ./.github/workflows/firebase_upload.yml
     with:
-      variant: qa
+      variant: Qa
       apk_path: app/build/outputs/apk/qa/
     secrets: inherit
 
