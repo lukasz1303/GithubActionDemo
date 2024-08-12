@@ -12,20 +12,20 @@ jobs:
   check:
     uses: ./.github/workflows/unit_test_and_lint.yml
     with:
-      variant: qa
+      variant: Qa
     secrets: inherit
 
   build:
     uses: ./.github/workflows/build_and_sign.yml
     with:
-      variant: qa
+      variant: Qa
     secrets: inherit
 
   upload_to_firebase:
     needs: build
     uses: ./.github/workflows/firebase_upload.yml
     with:
-      variant: qa
+      variant: Qa
       apk_path: app/build/outputs/apk/qa/
     secrets: inherit
 
