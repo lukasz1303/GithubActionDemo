@@ -6,9 +6,10 @@ on:
 
 jobs:
   check:
-    uses: ./.github/workflows/unit_test.yml
+    uses: ./.github/workflows/unit_test_and_lint.yml
     with:
       variant: ${{ github.event.inputs.variant }}
+    secrets: inherit
 
   build:
     uses: ./.github/workflows/build_and_sign.yml
