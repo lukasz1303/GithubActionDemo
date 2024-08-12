@@ -5,11 +5,17 @@ on:
     branches: [ "main" ]
 
 jobs:
+  check:
+    uses: ./.github/workflows/unit_test.yml
+    with:
+      variant: ${{ github.event.inputs.variant }}
+
   build:
     uses: ./.github/workflows/build_and_sign.yml
     with:
       variant: qa
     secrets: inherit
+
   upload_to_firebase:
     needs: build
     uses: ./.github/workflows/firebase_upload.yml

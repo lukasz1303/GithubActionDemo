@@ -16,6 +16,11 @@ on:
 
 
 jobs:
+  check:
+    uses: ./.github/workflows/unit_test.yml
+    with:
+      variant: ${{ github.event.inputs.variant }}
+
   build:
     uses: ./.github/workflows/build_and_sign.yml
     with:
