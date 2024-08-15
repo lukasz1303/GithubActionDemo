@@ -32,13 +32,20 @@ jobs:
           echo "$SECRET_VALUE" | base64 --decode > $FILENAME
           echo "FILENAME=$FILENAME" >> $GITHUB_ENV
           
+          if [ ! -f "${{ env.FILENAME }}" ]; then
+            echo "Variant properties file not found.
+            exit 1
+          fi
+          
           FILENAME_LOCAL_PROPERTIES="local.properties"
           echo "${{ secrets.LOCAL_PROPERTIES_BASE64 }}" | base64 --decode > $FILENAME_LOCAL_PROPERTIES
           echo "FILENAME_LOCAL_PROPERTIES=$FILENAME_LOCAL_PROPERTIES" >> $GITHUB_ENV
+          
+          if [ ! -f "${{ env.FILENAME_LOCAL_PROPERTIES }}" ]; then
+            echo "Local properties file not found.
+            exit 1
+          fi
 
-      - name: test
-        run: |
-          echo "Generated FILENAME: $FILENAME"
       - name: Upload Variant Properties File
         uses: actions/upload-artifact@v4
         with:
