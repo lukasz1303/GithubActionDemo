@@ -33,6 +33,15 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
+      - name: Download Variant Properties File
+        uses: actions/download-artifact@v4
+        with:
+          name: properties-file
+      - name: Download Local Properties File
+        uses: actions/download-artifact@v4
+        with:
+          name: local-properties-file
+
       - name: Run Android Lint
         run: ./gradlew lint${{ inputs.variant }}
         env:
