@@ -39,12 +39,18 @@ jobs:
       - name: Check if Files Exist
         run: |
           if [ ! -f "${{ env.FILENAME }}" ]; then
-            echo "Variant properties file not found.
+            echo "Variant properties file not found."
+            exit 1
+          elif [ ! -s "${{ env.FILENAME }}" ]; then
+            echo "Variant properties file is empty."
             exit 1
           fi
           
           if [ ! -f "${{ env.FILENAME_LOCAL_PROPERTIES }}" ]; then
-            echo "Local properties file not found.
+            echo "Local properties file not found."
+            exit 1
+          elif [ ! -s "${{ env.FILENAME_LOCAL_PROPERTIES }}" ]; then
+            echo "Local properties file is empty."
             exit 1
           fi
       - name: Upload Variant Properties File
