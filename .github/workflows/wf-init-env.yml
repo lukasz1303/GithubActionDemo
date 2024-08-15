@@ -31,13 +31,23 @@ jobs:
           FILENAME="${VARIANT_LOWERCASE}.properties"
           echo "$SECRET_VALUE" | base64 --decode > $FILENAME
           echo "FILENAME=$FILENAME" >> $GITHUB_ENV
+          
+          FILENAME_LOCAL_PROPERTIES = "local.properties"
+          echo ${{ secrets.LOCAL_PROPERTIES_BASE64 }} | base64 --decode > FILENAME_LOCAL_PROPERTIES
+          echo "FILENAME_LOCAL_PROPERTIES=$FILENAME_LOCAL_PROPERTIES" >> $GITHUB_ENV
 
       - name: test
         run: |
           echo "Generated FILENAME: $FILENAME"
-      - name: Upload Properties File
+      - name: Upload Variant Properties File
         uses: actions/upload-artifact@v4
         with:
           name: properties-file
           path: ${{ env.FILENAME }}
+
+      - name: Upload Local Properties File
+        uses: actions/upload-artifact@v4
+        with:
+          name: properties-file
+          path: ${{ env.FILENAME_LOCAL_PROPERTIES }}
 

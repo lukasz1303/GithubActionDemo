@@ -22,6 +22,12 @@ jobs:
       variant: ${{ github.event.inputs.variant }}
     secrets: inherit
 
+    load-properties:
+      uses: ./.github/workflows/wf-init-env.yml
+      with:
+        variant: local
+      secrets: inherit
+
   check:
     uses: ./.github/workflows/unit_test_and_lint.yml
     with:
