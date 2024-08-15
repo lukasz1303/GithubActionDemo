@@ -18,9 +18,12 @@ jobs:
           SECRET_NAME: ${{ inputs.variant }}_PROPERTIES_BASE64
         run: |
           VARIANT_LOWERCASE=$(echo "${{ inputs.variant }}" | tr '[:upper:]' '[:lower:]')
-          VARIANT_UPPERCASE=$(echo "${{ inputs.variant }}" | tr '[:lower:]' '[:upper:]')
-          SECRET_VALUE=$(echo "${{ secrets["${VARIANT_UPPERCASE}_PROPERTIES_BASE64"] }}")
-          FILENAME="${VARIANT_LOWERCASE}.properties"
+          SECRET_NAME=$(echo "${{ inputs.variant }}" | tr '[:lower:]' '[:upper:]')_PROPERTIES_BASE64
+          SECRET_VALUE="${{ secrets[SECRET_NAME] }}"
+          if [ -z "$SECRET_VALUE" ]; then
+            echo "Secret not found"
+            exit 1
+          fi
           echo "$SECRET_VALUE" | base64 --decode > $FILENAME
           echo "FILENAME=$FILENAME" >> $GITHUB_ENV
           echo "Generated FILENAME: $FILENAME"
