@@ -20,6 +20,10 @@ jobs:
           SECRET_VALUE=$(echo "${{ secrets[env.SECRET_NAME] }}")
           FILENAME="${{ inputs.variant }}.properties"
           echo "$SECRET_VALUE" | base64 --decode > $FILENAME
+          # Dodatkowe logowanie do debugowania
+          echo "Generated FILENAME: $FILENAME"
+          ls -lah
+          pwd
 
       - name: Upload Properties File
         uses: actions/upload-artifact@v4
