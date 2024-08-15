@@ -20,7 +20,8 @@ jobs:
           VARIANT_LOWERCASE=$(echo "${{ inputs.variant }}" | tr '[:upper:]' '[:lower:]')
           SECRET_VALUE=$(echo "${{ secrets[env.SECRET_NAME] }}")
           FILENAME="${VARIANT_LOWERCASE}.properties"
-          echo "$SECRET_VALUE" | base64 --decode > "$FILENAME"
+          echo "$SECRET_VALUE" | base64 --decode > $FILENAME
+          echo "FILENAME=$FILENAME" >> $GITHUB_ENV
           echo "Generated FILENAME: $FILENAME"
           ls -lah
           pwd
@@ -32,5 +33,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: properties-file
-          path: $FILENAME
+          path: ${{ env.FILENAME }}
 
