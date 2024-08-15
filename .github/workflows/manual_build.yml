@@ -17,7 +17,7 @@ on:
 
 jobs:
   load-properties:
-    uses: ./.github/workflows/load-and-upload-properties.yml
+    uses: ./.github/workflows/wf-init-env.yml
     with:
       variant: ${{ github.event.inputs.variant }}
 

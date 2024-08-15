@@ -10,7 +10,7 @@ concurrency:
 
 jobs:
   load-properties:
-    uses: ./.github/workflows/load-and-upload-properties.yml
+    uses: ./.github/workflows/wf-init-env.yml
     with:
       variant: Qa
 
