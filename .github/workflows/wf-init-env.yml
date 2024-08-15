@@ -17,8 +17,9 @@ jobs:
         env:
           SECRET_NAME: ${{ inputs.variant }}_PROPERTIES_BASE64
         run: |
+          
           SECRET_VALUE=$(echo "${{ secrets[env.SECRET_NAME] }}")
-          FILENAME="${{ inputs.variant }}.properties"
+          FILENAME="${{ inputs.variant,, }}.properties"
           echo "$SECRET_VALUE" | base64 --decode > $FILENAME
           # Dodatkowe logowanie do debugowania
           echo "Generated FILENAME: $FILENAME"
