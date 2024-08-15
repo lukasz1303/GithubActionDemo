@@ -20,6 +20,7 @@ jobs:
     uses: ./.github/workflows/wf-init-env.yml
     with:
       variant: ${{ github.event.inputs.variant }}
+    secrets: inherit
 
   check:
     uses: ./.github/workflows/unit_test_and_lint.yml

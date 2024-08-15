@@ -16,9 +16,6 @@ jobs:
       - name: Load Properties File
         run: |
           VARIANT_LOWERCASE=$(echo "${{ inputs.variant }}" | tr '[:upper:]' '[:lower:]')
-          VARIANT_UPPERCASE=$(echo "${{ inputs.variant }}" | tr '[:lower:]' '[:upper:]')
-          
-          echo "VARIANT_LOWERCASE = ${VARIANT_LOWERCASE}"
           
           if [ "$VARIANT_LOWERCASE" == "debug" ]; then
             SECRET_VALUE=${{ secrets.DEBUG_PROPERTIES_BASE64 }}
@@ -34,10 +31,6 @@ jobs:
           FILENAME="${VARIANT_LOWERCASE}.properties"
           echo "$SECRET_VALUE" | base64 --decode > $FILENAME
           echo "FILENAME=$FILENAME" >> $GITHUB_ENV
-          echo "Generated FILENAME: $FILENAME"
-          echo "Generated SECRET_VALUE: $SECRET_VALUE"
-          ls -lah
-          pwd
 
       - name: test
         run: |
