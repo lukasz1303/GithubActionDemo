@@ -16,6 +16,11 @@ on:
 
 
 jobs:
+  load-properties:
+    uses: ./.github/workflows/load-and-upload-properties.yml
+    with:
+      variant: ${{ github.event.inputs.variant }}
+
   check:
     uses: ./.github/workflows/unit_test_and_lint.yml
     with:
@@ -23,6 +28,7 @@ jobs:
     secrets: inherit
 
   build:
+    needs: load-properties
     uses: ./.github/workflows/build_and_sign.yml
     with:
       variant: ${{ github.event.inputs.variant }}

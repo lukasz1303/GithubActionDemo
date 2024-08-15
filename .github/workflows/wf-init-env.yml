@@ -1,0 +1,28 @@
+name: Init environment properties
+
+on:
+  workflow_call:
+    inputs:
+      variant:
+        required: true
+        type: string
+
+jobs:
+  load-and-upload:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Load Properties File
+        run: |
+          SECRET_NAME="${{ inputs.variant }}_PROPERTIES_BASE64"
+          SECRET_VALUE="${{ secrets[SECRET_NAME] }}"
+          FILENAME="${{ inputs.variant }}.properties"
+          echo "$SECRET_VALUE" | base64 --decode > $FILENAME
+
+      - name: Upload Properties File
+        uses: actions/upload-artifact@v4
+        with:
+          name: properties-file
+          path: $FILENAME
+
