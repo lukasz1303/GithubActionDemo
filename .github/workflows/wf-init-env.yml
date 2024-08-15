@@ -25,6 +25,9 @@ jobs:
           ls -lah
           pwd
 
+      - name: test
+        run: |
+          echo "Generated FILENAME: $FILENAME"
       - name: Upload Properties File
         uses: actions/upload-artifact@v4
         with:
