@@ -16,6 +16,7 @@ jobs:
     secrets: inherit
 
   check:
+    needs: load-properties
     uses: ./.github/workflows/unit_test_and_lint.yml
     with:
       variant: Qa
