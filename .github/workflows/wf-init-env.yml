@@ -23,6 +23,7 @@ jobs:
           echo "$SECRET_VALUE" | base64 --decode > $FILENAME
           echo "FILENAME=$FILENAME" >> $GITHUB_ENV
           echo "Generated FILENAME: $FILENAME"
+          echo "Generated SECRET_VALUE: SECRET_VALUE"
           ls -lah
           pwd
 
