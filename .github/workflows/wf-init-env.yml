@@ -15,13 +15,21 @@ jobs:
 
       - name: Load Properties File
         run: |
-          VARIANT_LOWERCASE=$(echo "${{ inputs.variant }}" | tr '[:upper:]' '[:lower:]')
-          SECRET_NAME=$(echo "${{ inputs.variant }}" | tr '[:lower:]' '[:upper:]')_PROPERTIES_BASE64
-          SECRET_VALUE="${{ secrets[SECRET_NAME] }}"
-          if [ -z "$SECRET_VALUE" ]; then
-            echo "Secret not found"
+          VARIANT_LOWERCASE=$(echo "$VARIANT" | tr '[:upper:]' '[:lower:]')
+          VARIANT_UPPERCASE=$(echo "$VARIANT" | tr '[:lower:]' '[:upper:]')
+          
+          if [ "$VARIANT_LOWERCASE" == "debug" ]; then
+            SECRET_VALUE=${{ secrets.DEBUG_PROPERTIES_BASE64 }}
+          elif [ "$VARIANT_LOWERCASE" == "qa" ]; then
+            SECRET_VALUE=${{ secrets.QA_PROPERTIES_BASE64 }}
+          elif [ "$VARIANT_LOWERCASE" == "release" ]; then
+            SECRET_VALUE=${{ secrets.RELEASE_PROPERTIES_BASE64 }}
+          else
+            echo "Error: Unsupported variant '${VARIANT}'"
             exit 1
           fi
+
+          FILENAME="${VARIANT_LOWERCASE}.properties"
           echo "$SECRET_VALUE" | base64 --decode > $FILENAME
           echo "FILENAME=$FILENAME" >> $GITHUB_ENV
           echo "Generated FILENAME: $FILENAME"
