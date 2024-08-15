@@ -15,8 +15,10 @@ jobs:
 
       - name: Load Properties File
         run: |
-          VARIANT_LOWERCASE=$(echo "$VARIANT" | tr '[:upper:]' '[:lower:]')
-          VARIANT_UPPERCASE=$(echo "$VARIANT" | tr '[:lower:]' '[:upper:]')
+          VARIANT_LOWERCASE=$(echo "${{ inputs.variant }}" | tr '[:upper:]' '[:lower:]')
+          VARIANT_UPPERCASE=$(echo "${{ inputs.variant }}" | tr '[:lower:]' '[:upper:]')
+          
+          echo "VARIANT_LOWERCASE = ${VARIANT_LOWERCASE}"
           
           if [ "$VARIANT_LOWERCASE" == "debug" ]; then
             SECRET_VALUE=${{ secrets.DEBUG_PROPERTIES_BASE64 }}
