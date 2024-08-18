@@ -28,11 +28,11 @@ jobs:
             exit 1
           fi
 
-          FILENAME="${VARIANT_LOWERCASE}.properties"
+          FILENAME="${VARIANT_LOWERCASE}.properties.gpg"
           echo "$SECRET_VALUE" | base64 --decode > $FILENAME
           echo "FILENAME=$FILENAME" >> $GITHUB_ENV
           
-          FILENAME_LOCAL_PROPERTIES="local.properties"
+          FILENAME_LOCAL_PROPERTIES="local.properties.gpg"
           echo "${{ secrets.LOCAL_PROPERTIES_GPG_BASE64 }}" | base64 --decode > $FILENAME_LOCAL_PROPERTIES
           echo "FILENAME_LOCAL_PROPERTIES=$FILENAME_LOCAL_PROPERTIES" >> $GITHUB_ENV
           
