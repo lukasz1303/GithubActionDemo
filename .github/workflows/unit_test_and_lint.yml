@@ -90,6 +90,17 @@ jobs:
         with:
           name: local-properties-file
 
+      - name: Decrypt all .gpg files
+        run: |
+          for file in *.gpg; do
+            if [[ -f "$file" ]]; then
+              echo "Decrypting $file"
+              gpg --batch --yes --passphrase "$GPG_PASSPHRASE" --output "${file%.gpg}" --decrypt "$file"
+            fi
+          done
+        env:
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+
       - name: Run unit tests
         run: ./gradlew test${{ inputs.variant }}UnitTest
         env:
