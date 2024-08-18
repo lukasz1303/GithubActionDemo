@@ -18,11 +18,11 @@ jobs:
           VARIANT_LOWERCASE=$(echo "${{ inputs.variant }}" | tr '[:upper:]' '[:lower:]')
           
           if [ "$VARIANT_LOWERCASE" == "debug" ]; then
-            SECRET_VALUE=${{ secrets.DEBUG_PROPERTIES_BASE64 }}
+            SECRET_VALUE=${{ secrets.DEBUG_PROPERTIES_GPG_BASE64 }}
           elif [ "$VARIANT_LOWERCASE" == "qa" ]; then
-            SECRET_VALUE=${{ secrets.QA_PROPERTIES_BASE64 }}
+            SECRET_VALUE=${{ secrets.QA_PROPERTIES_GPG_BASE64 }}
           elif [ "$VARIANT_LOWERCASE" == "release" ]; then
-            SECRET_VALUE=${{ secrets.RELEASE_PROPERTIES_BASE64 }}
+            SECRET_VALUE=${{ secrets.RELEASE_PROPERTIES_GPG_BASE64 }}
           else
             echo "Error: Unsupported variant '${VARIANT}'"
             exit 1
@@ -33,7 +33,7 @@ jobs:
           echo "FILENAME=$FILENAME" >> $GITHUB_ENV
           
           FILENAME_LOCAL_PROPERTIES="local.properties"
-          echo "${{ secrets.LOCAL_PROPERTIES_BASE64 }}" | base64 --decode > $FILENAME_LOCAL_PROPERTIES
+          echo "${{ secrets.LOCAL_PROPERTIES_GPG_BASE64 }}" | base64 --decode > $FILENAME_LOCAL_PROPERTIES
           echo "FILENAME_LOCAL_PROPERTIES=$FILENAME_LOCAL_PROPERTIES" >> $GITHUB_ENV
           
       - name: Check if Files Exist
