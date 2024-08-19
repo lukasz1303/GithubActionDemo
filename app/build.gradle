@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.secrets.gradle.plugin)
 }
 
+def IS_CI = rootProject.ext.getEnvironmentProperty("CI").toBoolean()
+
 android {
     namespace 'com.example.githubactionsdemo'
     compileSdk 34
@@ -27,13 +29,7 @@ android {
     }
     signingConfigs {
         release {
-            def tmpFilePath = System.getProperty("user.home") + "/work/_temp/keystore/"
-            def allFilesFromDir = new File(tmpFilePath).listFiles()
-            if (allFilesFromDir != null) {
-                def keystoreFile = allFilesFromDir.first()
-                keystoreFile.renameTo("./app/keystore.jks")
-            }
-            storeFile = file("keystore.jks")
+            storeFile file(System.getenv("RUNNER_TEMP") + "/keystore.jks")
             storePassword rootProject.ext.getEnvironmentProperty("ANDROID_KEYSTORE_PASSWORD")
             keyAlias rootProject.ext.getEnvironmentProperty("ANDROID_KEY_ALIAS")
             keyPassword rootProject.ext.getEnvironmentProperty("ANDROID_KEY_PASSWORD")
@@ -46,14 +42,18 @@ android {
             buildConfigField('String', 'TestVariantField', '"Variant Debug"')
             applicationIdSuffix = ".dev"
             versionNameSuffix ' dev'
-            signingConfig signingConfigs.release
+            signingConfig signingConfigs.debug
         }
         release {
             shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField('String', 'TestVariantField', '"Variant Release"')
-            signingConfig signingConfigs.release
+            if (IS_CI) {
+                signingConfig = signingConfigs.release
+            } else {
+                signingConfig = signingConfigs.debug
+            }
         }
         staging {
             initWith debug
@@ -67,7 +67,6 @@ android {
             buildConfigField('String', 'TestVariantField', '"Variant QA"')
             applicationIdSuffix = ".staging"
             versionNameSuffix ' qa'
-            signingConfig signingConfigs.release
         }
     }
 
