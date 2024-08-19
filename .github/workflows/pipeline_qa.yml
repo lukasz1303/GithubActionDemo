@@ -15,15 +15,18 @@ jobs:
       variant: Qa
     secrets: inherit
 
+  check-branch:
+    uses: ./.github/workflows/wf-check-branch.yml
+
   check:
-    needs: load-properties
+    needs: [load-properties, check-branch]
     uses: ./.github/workflows/unit_test_and_lint.yml
     with:
       variant: Qa
     secrets: inherit
 
   build:
-    needs: load-properties
+    needs: [load-properties, check-branch]
     uses: ./.github/workflows/build_and_sign.yml
     with:
       variant: Qa
