@@ -1,0 +1,20 @@
+name: Branch Name Check
+
+on:
+  workflow_call:
+
+jobs:
+  check-branch-name:
+    runs-on: ubuntu-latest
+    env:
+      BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+    steps:
+      - name: Checking the branch name
+        run: |
+          if [[ "$BRANCH_NAME" =~ ^feature/DEMO-[0-9]+-[a-z0-9-]+[a-z]$ ]] || \
+             [[ "$BRANCH_NAME" == "main" ]]; then
+            echo "Branch name is correct."
+          else
+            echo "PR source branch name is incorrect."
+            exit 1
+          fi

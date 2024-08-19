@@ -16,13 +16,24 @@ on:
 
 
 jobs:
+  load-properties:
+    uses: ./.github/workflows/wf-init-env.yml
+    with:
+      variant: ${{ github.event.inputs.variant }}
+    secrets: inherit
+
+  check-branch:
+    uses: ./.github/workflows/wf-check-branch.yml
+
   check:
+    needs: [load-properties, check-branch]
     uses: ./.github/workflows/unit_test_and_lint.yml
     with:
       variant: ${{ github.event.inputs.variant }}
     secrets: inherit
 
   build:
+    needs: [load-properties, check-branch]
     uses: ./.github/workflows/build_and_sign.yml
     with:
       variant: ${{ github.event.inputs.variant }}

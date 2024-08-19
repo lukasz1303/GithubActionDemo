@@ -1,0 +1,67 @@
+name: Init environment properties
+
+on:
+  workflow_call:
+    inputs:
+      variant:
+        required: true
+        type: string
+
+jobs:
+  load-and-upload:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Load Properties File
+        run: |
+          VARIANT_LOWERCASE=$(echo "${{ inputs.variant }}" | tr '[:upper:]' '[:lower:]')
+          
+          if [ "$VARIANT_LOWERCASE" == "debug" ]; then
+            SECRET_VALUE=${{ secrets.DEBUG_PROPERTIES_GPG_BASE64 }}
+          elif [ "$VARIANT_LOWERCASE" == "qa" ]; then
+            SECRET_VALUE=${{ secrets.QA_PROPERTIES_GPG_BASE64 }}
+          elif [ "$VARIANT_LOWERCASE" == "release" ]; then
+            SECRET_VALUE=${{ secrets.RELEASE_PROPERTIES_GPG_BASE64 }}
+          else
+            echo "Error: Unsupported variant '${VARIANT}'"
+            exit 1
+          fi
+
+          FILENAME="${VARIANT_LOWERCASE}.properties.gpg"
+          echo "$SECRET_VALUE" | base64 --decode > $FILENAME
+          echo "FILENAME=$FILENAME" >> $GITHUB_ENV
+          
+          FILENAME_LOCAL_PROPERTIES="local.properties.gpg"
+          echo "${{ secrets.LOCAL_PROPERTIES_GPG_BASE64 }}" | base64 --decode > $FILENAME_LOCAL_PROPERTIES
+          echo "FILENAME_LOCAL_PROPERTIES=$FILENAME_LOCAL_PROPERTIES" >> $GITHUB_ENV
+          
+      - name: Check if Files Exist
+        run: |
+          if [ ! -f "${{ env.FILENAME }}" ]; then
+            echo "Variant properties file not found."
+            exit 1
+          elif [ ! -s "${{ env.FILENAME }}" ]; then
+            echo "Variant properties file is empty."
+            exit 1
+          fi
+          
+          if [ ! -f "${{ env.FILENAME_LOCAL_PROPERTIES }}" ]; then
+            echo "Local properties file not found."
+            exit 1
+          elif [ ! -s "${{ env.FILENAME_LOCAL_PROPERTIES }}" ]; then
+            echo "Local properties file is empty."
+            exit 1
+          fi
+      - name: Upload Variant Properties File
+        uses: actions/upload-artifact@v4
+        with:
+          name: properties-file
+          path: ${{ env.FILENAME }}
+
+      - name: Upload Local Properties File
+        uses: actions/upload-artifact@v4
+        with:
+          name: local-properties-file
+          path: ${{ env.FILENAME_LOCAL_PROPERTIES }}
+
