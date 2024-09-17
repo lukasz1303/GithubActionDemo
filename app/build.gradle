@@ -10,6 +10,7 @@ def IS_CI = rootProject.ext.getEnvironmentProperty("CI").toBoolean()
 android {
     namespace 'com.example.githubactionsdemo'
     compileSdk 34
+    testBuildType "qa"
 
     defaultConfig {
         applicationId "com.example.githubactionsdemo"
@@ -63,7 +64,7 @@ android {
             signingConfig signingConfigs.release
         }
         qa {
-            initWith release
+            initWith debug
             buildConfigField('String', 'TestVariantField', '"Variant QA"')
             applicationIdSuffix = ".staging"
             versionNameSuffix ' qa'
