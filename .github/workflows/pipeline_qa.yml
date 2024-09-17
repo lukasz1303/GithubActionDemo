@@ -12,7 +12,7 @@ jobs:
   load-properties:
     uses: ./.github/workflows/wf-init-env.yml
     with:
-      variant: Qa
+      variant: Staging
     secrets: inherit
 
   check-branch:
@@ -22,21 +22,21 @@ jobs:
     needs: [load-properties, check-branch]
     uses: ./.github/workflows/unit_test_and_lint.yml
     with:
-      variant: Qa
+      variant: Staging
     secrets: inherit
 
   build:
     needs: [load-properties, check-branch]
     uses: ./.github/workflows/build_and_sign.yml
     with:
-      variant: Qa
+      variant: Staging
     secrets: inherit
 
   upload_to_firebase:
     needs: [ build, check ]
     uses: ./.github/workflows/firebase_upload.yml
     with:
-      variant: Qa
-      apk_path: app/build/outputs/apk/qa/
+      variant: Staging
+      apk_path: app/build/outputs/apk/staging/
     secrets: inherit
 
