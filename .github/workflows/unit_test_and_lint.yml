@@ -132,6 +132,15 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
+      - name: Download Variant Properties File
+        uses: actions/download-artifact@v4
+        with:
+          name: properties-file
+      - name: Download Local Properties File
+        uses: actions/download-artifact@v4
+        with:
+          name: local-properties-file
+
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
