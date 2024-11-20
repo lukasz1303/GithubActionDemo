@@ -32,7 +32,7 @@ jobs:
           fi
           echo "$SECRET_VALUE"
           FILENAME="${VARIANT_LOWERCASE}.properties.gpg"
-          echo "$SECRET_VALUE" | base64 --decode > $FILENAME
+          echo "$SECRET_VALUE" > $FILENAME
           echo "FILENAME=$FILENAME" >> $GITHUB_ENV
           
           echo "Contents of $FILENAME:"
