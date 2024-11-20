@@ -12,6 +12,7 @@ jobs:
       - name: Checking the branch name
         run: |
           if [[ "$BRANCH_NAME" =~ ^feature/DEMO-[0-9]+-[a-z0-9-]+[a-z]$ ]] || \
+             [[ "$BRANCH_NAME" =~ ^dependabot/.+ ]] || \
              [[ "$BRANCH_NAME" == "main" ]]; then
             echo "Branch name is correct."
           else
