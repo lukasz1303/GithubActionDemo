@@ -1,14 +1,25 @@
 name: Android Manual Build
 
 on:
-  pull_request:
-    branches: [ "main" ]
+  workflow_dispatch:
+    inputs:
+      variant:
+        description: 'Variant to build'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - Staging
+          - Qa
+          - Release
+          - Debug
+
 
 jobs:
   load-properties:
     uses: ./.github/workflows/wf-init-env.yml
     with:
-      variant: Qa
+      variant: ${{ github.event.inputs.variant }}
     secrets: inherit
 
   check-branch:
@@ -18,20 +29,20 @@ jobs:
     needs: [load-properties, check-branch]
     uses: ./.github/workflows/unit_test_and_lint.yml
     with:
-      variant: Qa
+      variant: ${{ github.event.inputs.variant }}
     secrets: inherit
 
   build:
     needs: [load-properties, check-branch]
     uses: ./.github/workflows/build_and_sign.yml
     with:
-      variant: Qa
+      variant: ${{ github.event.inputs.variant }}
     secrets: inherit
 
   upload_to_firebase:
     needs: [build, check]
     uses: ./.github/workflows/firebase_upload.yml
     with:
-      variant: Qa
-      apk_path: app/build/outputs/apk/qa/
+      variant: ${{ github.event.inputs.variant }}
+      apk_path: app/build/outputs/apk/${{ github.event.inputs.variant }}/
     secrets: inherit
