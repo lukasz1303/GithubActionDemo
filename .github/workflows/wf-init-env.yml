@@ -18,16 +18,19 @@ jobs:
           VARIANT_LOWERCASE=$(echo "${{ inputs.variant }}" | tr '[:upper:]' '[:lower:]')
           
           if [ "$VARIANT_LOWERCASE" == "debug" ]; then
+            echo "Load debug properties"
             SECRET_VALUE=${{ secrets.DEBUG_PROPERTIES_GPG_BASE64 }}
           elif [ "$VARIANT_LOWERCASE" == "qa" ]; then
+            echo "Load qa properties"
             SECRET_VALUE=${{ secrets.QA_PROPERTIES_GPG_BASE64 }}
           elif [ "$VARIANT_LOWERCASE" == "release" ]; then
+            echo "Load release properties"
             SECRET_VALUE=${{ secrets.RELEASE_PROPERTIES_GPG_BASE64 }}
           else
             echo "Error: Unsupported variant '${VARIANT}'"
             exit 1
           fi
-
+          echo "$SECRET_VALUE"
           FILENAME="${VARIANT_LOWERCASE}.properties.gpg"
           echo "$SECRET_VALUE" | base64 --decode > $FILENAME
           echo "FILENAME=$FILENAME" >> $GITHUB_ENV
