@@ -1,19 +1,8 @@
 name: Android Manual Build
 
 on:
-  workflow_dispatch:
-    inputs:
-      variant:
-        description: 'Variant to build'
-        required: true
-        default: 'staging'
-        type: choice
-        options:
-          - Staging
-          - Qa
-          - Release
-          - Debug
-
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   load-properties:
