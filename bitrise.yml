@@ -41,15 +41,15 @@ workflows:
             - content: |
                 #!/bin/bash
                 chmod +x ./gradlew
-                ./gradlew lint${VARIANT_LOWERCASE}
-                ./gradlew test${VARIANT_LOWERCASE}UnitTest
+                ./gradlew lint${VARIANT}
+                ./gradlew test${VARIANT}UnitTest
       - script:
           title: "Build APK"
           inputs:
             - content: |
                 #!/bin/bash
                 chmod +x ./gradlew
-                ./gradlew assemble${VARIANT_LOWERCASE}
+                ./gradlew assemble${VARIANT}
 app:
   envs:
     - GPG_PASSPHRASE: "$GPG_PASSPHRASE"
