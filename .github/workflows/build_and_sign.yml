@@ -52,14 +52,14 @@ jobs:
       env:
         GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
     - name: Generate build number
-      if: ${{ !contains(github.ref, 'refs/heads/dependabot/') }}
+      if: ${{ !startsWith(github.ref, 'refs/heads/dependabot/') && !startsWith(github.head_ref, 'dependabot/') }}
       id: buildnumber
       uses: onyxmueller/build-tag-number@v1
       with:
         token: ${{secrets.GITHUB_TOKEN}}
 
     - name: Update version code in build.gradle
-      if: ${{ !contains(github.ref, 'refs/heads/dependabot/') }}
+      if: ${{ !startsWith(github.ref, 'refs/heads/dependabot/') && !startsWith(github.head_ref, 'dependabot/') }}
       run: |
         sed -i "s/versionCode [0-9]\+/versionCode ${{ steps.buildnumber.outputs.build_number }}/" app/build.gradle
 
