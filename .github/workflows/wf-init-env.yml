@@ -30,6 +30,13 @@ jobs:
             echo "Error: Unsupported variant '${VARIANT}'"
             exit 1
           fi
+          
+          if [ -z "${{ secrets.QA_PROPERTIES_GPG_BASE64 }}" ]; then
+          echo "Secret does not exist or is empty"
+          else
+          echo "Secret exists"
+          fi
+    
           echo "$SECRET_VALUE"
           FILENAME="${VARIANT_LOWERCASE}.properties.gpg"
           echo "$SECRET_VALUE" > $FILENAME
@@ -37,6 +44,9 @@ jobs:
           
           echo "Contents of $FILENAME:"
           cat "${{ env.FILENAME }}"
+
+          echo "Listing files in the current directory:"
+          ls -la
       
           FILENAME_LOCAL_PROPERTIES="local.properties.gpg"
           echo "${{ secrets.LOCAL_PROPERTIES_GPG_BASE64 }}" | base64 --decode > $FILENAME_LOCAL_PROPERTIES
