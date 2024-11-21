@@ -33,6 +33,7 @@ jobs:
     secrets: inherit
 
   upload_to_firebase:
+    if: ${{ !contains(github.ref, 'refs/heads/dependabot/') }}
     needs: [ build, check ]
     uses: ./.github/workflows/firebase_upload.yml
     with:
