@@ -11,26 +11,30 @@ workflows:
           inputs:
             - ssh_key_scan: "false"
       - git-clone: {}
-      - script:
-          title: "Initialize Environment"
+      - file-downloader:
           inputs:
-            - content: |
-                #!/bin/bash
-                VARIANT_LOWERCASE=$(echo "$VARIANT" | tr '[:upper:]' '[:lower:]')
-                if [ "$VARIANT_LOWERCASE" == "debug" ]; then
-                  SECRET_VALUE=$BITRISE_SECRET_DEBUG_PROPERTIES_GPG_BASE64
-                elif [ "$VARIANT_LOWERCASE" == "qa" ]; then
-                  SECRET_VALUE=$BITRISE_SECRET_QA_PROPERTIES_GPG_BASE64
-                elif [ "$VARIANT_LOWERCASE" == "release" ]; then
-                  SECRET_VALUE=$BITRISE_SECRET_RELEASE_PROPERTIES_GPG_BASE64
-                else
-                  echo "Unsupported variant $VARIANT"
-                  exit 1
-                fi
-                echo "$SECRET_VALUE" | base64 --decode > "${VARIANT_LOWERCASE}.properties.gpg"
-                echo "Decoded secret for $VARIANT_LOWERCASE"
-                
-                echo "$BITRISE_SECRET_LOCAL_PROPERTIES_GPG_BASE64" | base64 --decode > "local.properties.gpg"
+            - destination: "$BITRISE_SOURCE_DIR/local.properties.gpg"
+            - source: "$BITRISEIO_LOCAL_PROPERTIES_URL"
+      - decrypt-file@0:
+          inputs:
+            - encrypted_file_path: local.properties.gpg
+            - output_file_path: "$BITRISE_SOURCE_DIR/local.properties"
+            - decrypt_passphrase: "$PROPERTIES_ENCRYPTION_KEY"
+      - secure-delete-path@2:
+          inputs:
+            - path: "$BITRISE_SOURCE_DIR/local.properties.gpg"
+      - file-downloader:
+          inputs:
+            - destination: "$BITRISE_SOURCE_DIR/qa.properties.gpg"
+            - source: "$BITRISEIO_QA_PROPERTIES_URL"
+      - decrypt-file@0:
+          inputs:
+            - encrypted_file_path: qa.properties.gpg
+            - output_file_path: "$BITRISE_SOURCE_DIR/qa.properties"
+            - decrypt_passphrase: "$PROPERTIES_ENCRYPTION_KEY"
+      - secure-delete-path@2:
+          inputs:
+            - path: "$BITRISE_SOURCE_DIR/qa.properties.gpg"
       - script:
           title: "Lint and Test"
           inputs:
@@ -48,6 +52,6 @@ workflows:
                 ./gradlew assemble${VARIANT_LOWERCASE}
 app:
   envs:
-
+    - GPG_PASSPHRASE: "$GPG_PASSPHRASE"
     - GRADLEW_PATH: "./gradlew"
     - VARIANT: "qa"
