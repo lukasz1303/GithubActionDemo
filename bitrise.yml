@@ -1,0 +1,48 @@
+---
+format_version: '8'
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+workflows:
+  default:
+    steps:
+      - activate-ssh-key:
+          inputs:
+            - ssh_key_scan: "false"
+      - git-clone: {}
+      - script:
+          title: "Initialize Environment"
+          inputs:
+            - content: |
+                #!/bin/bash
+                VARIANT_LOWERCASE=$(echo "$VARIANT" | tr '[:upper:]' '[:lower:]')
+                if [ "$VARIANT_LOWERCASE" == "debug" ]; then
+                  SECRET_VALUE=$BITRISE_SECRET_DEBUG_PROPERTIES_GPG_BASE64
+                elif [ "$VARIANT_LOWERCASE" == "qa" ]; then
+                  SECRET_VALUE=$BITRISE_SECRET_QA_PROPERTIES_GPG_BASE64
+                elif [ "$VARIANT_LOWERCASE" == "release" ]; then
+                  SECRET_VALUE=$BITRISE_SECRET_RELEASE_PROPERTIES_GPG_BASE64
+                else
+                  echo "Unsupported variant $VARIANT"
+                  exit 1
+                fi
+                echo "$SECRET_VALUE" | base64 --decode > "${VARIANT_LOWERCASE}.properties.gpg"
+                echo "Decoded secret for $VARIANT_LOWERCASE"
+                
+                echo "$BITRISE_SECRET_LOCAL_PROPERTIES_GPG_BASE64" | base64 --decode > "local.properties.gpg"
+      - script:
+          title: "Lint and Test"
+          inputs:
+            - content: |
+                #!/bin/bash
+                chmod +x ./gradlew
+                ./gradlew lint${VARIANT_LOWERCASE}
+                ./gradlew test${VARIANT_LOWERCASE}UnitTest
+      - script:
+          title: "Build APK"
+          inputs:
+            - content: |
+                #!/bin/bash
+                chmod +x ./gradlew
+                ./gradlew assemble${VARIANT_LOWERCASE}
+app:
+  envs:
+    - VARIANT: "qa"
