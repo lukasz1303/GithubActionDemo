@@ -27,6 +27,13 @@ jobs:
             echo "Error: Unsupported variant '${VARIANT}'"
             exit 1
           fi
+          
+          if [ -z "${{ secrets.QA_PROPERTIES_GPG_BASE64 }}" ]; then
+          echo "Secret does not exist or is empty"
+          else
+          echo "Secret exists"
+          fi
+    
 
           FILENAME="${VARIANT_LOWERCASE}.properties.gpg"
           echo "$SECRET_VALUE" | base64 --decode > $FILENAME
