@@ -4,6 +4,9 @@ default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 trigger_map:
   - push_branch: main
     workflow: default
+  - pull_request_source_branch: "*"
+    workflow: default
+    pull_request_target_branch: "*"
 workflows:
   default:
     steps:
