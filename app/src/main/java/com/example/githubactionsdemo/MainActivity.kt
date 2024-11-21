@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
-        text = "Hello ${BuildConfig.TestVariantField} $name! VER_CODE=${BuildConfig.VERSION_CODE} \n" +
+        text = "Hello Bot${BuildConfig.TestVariantField} $name! VER_CODE=${BuildConfig.VERSION_CODE} \n" +
                 "VER_NAME=${BuildConfig.VERSION_NAME}\n" +
                 "Variant_property = ${BuildConfig.VARIANT_PROPERTY}\n" +
                 "Local_property = ${BuildConfig.LocalKey}",
