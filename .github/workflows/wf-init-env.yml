@@ -41,9 +41,6 @@ jobs:
           FILENAME="${VARIANT_LOWERCASE}.properties.gpg"
           echo "$SECRET_VALUE" > $FILENAME
           echo "FILENAME=$FILENAME" >> $GITHUB_ENV
-          
-          echo "Contents of $FILENAME:"
-          cat "${{ env.FILENAME }}"
 
           echo "Listing files in the current directory:"
           ls -la
