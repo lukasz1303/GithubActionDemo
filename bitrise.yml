@@ -45,4 +45,7 @@ workflows:
                 ./gradlew assemble${VARIANT_LOWERCASE}
 app:
   envs:
+    - opts:
+        is_expand: false
+        GRADLEW_PATH: "./gradlew"
     - VARIANT: "qa"
