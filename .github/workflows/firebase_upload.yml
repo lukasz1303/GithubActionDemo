@@ -74,7 +74,7 @@ jobs:
 
       - name: Verify APK exists
         run: |
-          ls "$GITHUB_WORKSPACE/app/build/outputs/apk/qa/app-qa.apk"
+          ls "${{ inputs.apk_path }}app-${{ env.variant_lowercase }}.apk"
 
       - name: Verify APK exists 2
         run: |
