@@ -75,7 +75,7 @@ jobs:
       - name: Verify Service Account JSON
         run:
           cat "$HOME/service-account.json"
-          echo "$GOOGLE_APPLICATION_CREDENTIALS"
+          echo "$${{ env.GOOGLE_APPLICATION_CREDENTIALS }}"
 
       - name: Decode Google Service Account
         run:
