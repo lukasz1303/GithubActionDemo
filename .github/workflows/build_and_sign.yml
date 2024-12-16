@@ -67,6 +67,7 @@ jobs:
       id: latest_build_tag
       run: |
         PREFIX="build-number-"
+        git fetch --tags
         TAG=$(git tag -l "$PREFIX*" | sort -rV | head -n 1)
         echo "Old tag $TAG"
         if [[ $TAG ]]; then
