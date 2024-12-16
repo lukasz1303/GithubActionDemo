@@ -60,23 +60,34 @@ jobs:
               ;;
           esac
 
-      - name: Create Service Account JSON
-        run: echo "$GOOGLE_APPLICATION_CREDENTIALS_JSON" > "$HOME/service-account.json"
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS_JSON: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '2.7'  # Upewnij się, że to jest wersja Ruby używana w Twoim projekcie Fastlane
 
-      - name: Install Fastlane
-        run: sudo gem install fastlane -n /usr/local/bin
-
-      - name: Install Fastlane plugins
-        run: bundle exec fastlane install_plugins
-
-
-      - name: Upload APK to Firebase App Distribution via Fastlane
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS_JSON: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
+      - name: Install Bundler and dependencies
         run: |
-          fastlane distribute_to_firebase app_id:${FIREBASE_APP_ID} apk_path:${APK_PATH}
+          gem install bundler
+          bundle install
+        working-directory: ./fastlane
+
+      - name: Load Firebase Service Account
+        run: |
+          echo "$CREDENTIAL_FILE_CONTENT" > "$HOME/service-account.json"
+          echo "GOOGLE_APPLICATION_CREDENTIALS=$HOME/service-account.json" >> $GITHUB_ENV
+        env:
+          CREDENTIAL_FILE_CONTENT: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
+
+
+      - name: Distribute APK to Firebase App Distribution via Fastlane
+        run: |
+          bundle exec fastlane run firebase_app_distribution \
+            app:"${{ env.app_id }}" \
+            apk_path:"${{ inputs.apk_path }}/app-${{ env.variant_lowercase }}.apk" \
+            groups:"testers"
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ env.GOOGLE_APPLICATION_CREDENTIALS }}
+        working-directory: ./fastlane
 
 #      - name: Upload APK to Firebase App Distribution
 #        uses: wzieba/Firebase-Distribution-Github-Action@v1
