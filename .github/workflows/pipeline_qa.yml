@@ -32,12 +32,12 @@ jobs:
       variant: Qa
     secrets: inherit
 
-#  upload_to_firebase:
-#    if: ${{ !startsWith(github.ref, 'refs/heads/dependabot/') && !startsWith(github.head_ref, 'dependabot/') }}
-#    needs: [ build, check ]
-#    uses: ./.github/workflows/firebase_upload.yml
-#    with:
-#      variant: Qa
-#      apk_path: app/build/outputs/apk/qa/
-#    secrets: inherit
+  upload_to_firebase:
+    if: ${{ !startsWith(github.ref, 'refs/heads/dependabot/') && !startsWith(github.head_ref, 'dependabot/') }}
+    needs: [ build, check ]
+    uses: ./.github/workflows/firebase_upload.yml
+    with:
+      variant: Qa
+      apk_path: app/build/outputs/apk/qa/
+    secrets: inherit
 
