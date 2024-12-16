@@ -68,6 +68,10 @@ jobs:
       - name: Install Fastlane
         run: sudo gem install fastlane -n /usr/local/bin
 
+      - name: Install Fastlane plugins
+        run: bundle exec fastlane install_plugins
+
+
       - name: Upload APK to Firebase App Distribution via Fastlane
         env:
           GOOGLE_APPLICATION_CREDENTIALS_JSON: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
