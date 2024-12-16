@@ -67,9 +67,8 @@ jobs:
         env:
             CREDENTIAL_FILE_CONTENT: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
         run:
-          echo "$CREDENTIAL_FILE_CONTENT" > "$HOME/service-account.json"
-          echo "GOOGLE_APPLICATION_CREDENTIALS=$HOME/service-account.json"
-          firebase appdistribution:distribute "${{ inputs.apk_path }}/app-${{ env.variant_lowercase }}.apk" \
+          echo "GOOGLE_APPLICATION_CREDENTIALS="$CREDENTIAL_FILE_CONTENT"
+          firebase appdistribution:distribute "${{ inputs.apk_path }}app-${{ env.variant_lowercase }}.apk" \
           --app "${{ env.app_id }}" \
           --groups "testers"
 
