@@ -68,28 +68,14 @@ jobs:
           CREDENTIAL_FILE_CONTENT: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
         run: echo "$CREDENTIAL_FILE_CONTENT" > "$HOME/service-account.json"
 
-
-      - name: Set Google Application Credentials
-        run: echo "GOOGLE_APPLICATION_CREDENTIALS=$HOME/service-account.json" >> $GITHUB_ENV
-
-      - name: Verify APK exists
+      - name: Upload APK to Firebase App Distribution
         run: |
-          ls "${{ inputs.apk_path }}app-${{ env.variant_lowercase }}.apk"
+          firebase appdistribution:distribute "${{ inputs.apk_path }}/app-${{ env.variant_lowercase }}.apk" \
+            --app "${{ env.app_id }}" \
+            --groups "testers"
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: $HOME/service-account.json
 
-      - name: Verify APK exists 2
-        run: |
-          ls "$HOME/service-account.json"
-
-      - name: Decode Google Service Account
-        run:
-          firebase appdistribution:distribute "${{ inputs.apk_path }}app-${{ env.variant_lowercase }}.apk" \
-          --app "${{ env.app_id }}" \
-          --groups "testers" \
-          --debug
-
-      - name: Verify Service Account JSON
-        run:
-          cat "$HOME/service-account.json"
 #      - name: Upload APK to Firebase App Distribution
 #        uses: wzieba/Firebase-Distribution-Github-Action@v1
 #        with:
