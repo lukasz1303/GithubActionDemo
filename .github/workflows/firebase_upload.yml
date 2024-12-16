@@ -83,7 +83,7 @@ jobs:
         run: |
           bundle exec fastlane run firebase_app_distribution \
             app:"${{ env.app_id }}" \
-            apk_path:"${{ inputs.apk_path }}/app-${{ env.variant_lowercase }}.apk" \
+            apk_path:"${{ inputs.apk_path }}app-${{ env.variant_lowercase }}.apk" \
             groups:"testers"
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ env.GOOGLE_APPLICATION_CREDENTIALS }}
