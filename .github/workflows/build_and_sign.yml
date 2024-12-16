@@ -63,6 +63,36 @@ jobs:
 #      run: |
 #        sed -i "s/versionCode [0-9]\+/versionCode ${{ steps.buildnumber.outputs.build_number }}/" app/build.gradle
 
+    - name: Retrieve the latest build tag
+      id: latest_build_tag
+      run: |
+        PREFIX="build-number-"
+        TAG=$(git tag -l "$PREFIX*" | sort -rV | head -n 1)
+        if [[ $TAG ]]; then
+          echo "::set-output name=old_tag::$TAG"
+        fi
+
+    - name: Determine new build number
+      id: new_build_number
+      run: |
+        PREFIX="build-number-"
+        LAST_BUILD_NUMBER=$(git tag -l "$PREFIX*" | sort -rV | head -n 1 | sed "s/^$PREFIX//")
+        BUILD_NUMBER=$((LAST_BUILD_NUMBER+1))
+        NEW_TAG="$PREFIX$BUILD_NUMBER"
+        echo "Next build number is $BUILD_NUMBER"
+        echo "::set-output name=new_tag::$NEW_TAG"
+        echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
+
+    - name: Tag the new build number
+      run: |
+        NEW_TAG=${{ steps.new_build_number.outputs.new_tag }}
+        OLD_TAG=${{ steps.new_build_number.outputs.old_tag }}
+        echo "Deleting old tag $TAG"
+        git tag -d $OLD_TAG
+        git push origin :refs/tags/$OLD_TAG
+        git tag $NEW_TAG
+        git push origin $NEW_TAG
+
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
