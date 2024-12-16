@@ -63,7 +63,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '2.7'  # Upewnij się, że to jest wersja Ruby używana w Twoim projekcie Fastlane
+          ruby-version: '3.0'
 
       - name: Install Bundler and dependencies
         run: |
