@@ -68,6 +68,7 @@ jobs:
       run: |
         PREFIX="build-number-"
         TAG=$(git tag -l "$PREFIX*" | sort -rV | head -n 1)
+        echo "Old tag $TAG"
         if [[ $TAG ]]; then
           echo "::set-output name=old_tag::$TAG"
         fi
@@ -86,7 +87,7 @@ jobs:
     - name: Tag the new build number
       run: |
         NEW_TAG=${{ steps.new_build_number.outputs.new_tag }}
-        OLD_TAG=${{ steps.new_build_number.outputs.old_tag }}
+        OLD_TAG=${{ steps.latest_build_tag.outputs.old_tag }}
         echo "Deleting old tag $TAG"
         git tag -d $OLD_TAG
         git push origin :refs/tags/$OLD_TAG
