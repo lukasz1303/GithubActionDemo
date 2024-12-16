@@ -79,6 +79,9 @@ jobs:
           CREDENTIAL_FILE_CONTENT: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
 
 
+      - name: List APK file
+        run: ls -l app/build/outputs/apk/qa/app-qa.apk
+
       - name: Distribute APK to Firebase App Distribution via Fastlane
         run: |
           bundle exec fastlane run firebase_app_distribution \
