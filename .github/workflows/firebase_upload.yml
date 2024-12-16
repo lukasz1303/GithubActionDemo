@@ -76,6 +76,9 @@ jobs:
         run: |
           ls "$GITHUB_WORKSPACE/app/build/outputs/apk/qa/app-qa.apk"
 
+      - name: Verify APK exists 2
+        run: |
+          ls "$HOME/service-account.json"
 
       - name: Decode Google Service Account
         run:
