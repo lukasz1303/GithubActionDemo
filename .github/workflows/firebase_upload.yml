@@ -66,7 +66,7 @@ jobs:
       - name: Load Google Service Account
         env:
           CREDENTIAL_FILE_CONTENT: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
-        run: echo "$CREDENTIAL_FILE_CONTENT" | base64 -d > "$HOME/service-account.json"
+        run: echo "$CREDENTIAL_FILE_CONTENT" > "$HOME/service-account.json"
 
 
       - name: Set Google Application Credentials
