@@ -72,10 +72,7 @@ jobs:
       - name: Set Google Application Credentials
         run: echo "GOOGLE_APPLICATION_CREDENTIALS=$HOME/service-account.json" >> $GITHUB_ENV
 
-      - name: Verify Service Account JSON
-        run:
-          cat "$HOME/service-account.json"
-          echo "$${{ env.GOOGLE_APPLICATION_CREDENTIALS }}"
+
 
       - name: Decode Google Service Account
         run:
@@ -85,7 +82,9 @@ jobs:
           --app "${{ env.app_id }}" \
           --groups "testers"
 
-
+      - name: Verify Service Account JSON
+        run:
+          cat "$HOME/service-account.json"
 #      - name: Upload APK to Firebase App Distribution
 #        uses: wzieba/Firebase-Distribution-Github-Action@v1
 #        with:
