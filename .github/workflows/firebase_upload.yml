@@ -72,6 +72,9 @@ jobs:
       - name: Set Google Application Credentials
         run: echo "GOOGLE_APPLICATION_CREDENTIALS=$HOME/service-account.json" >> $GITHUB_ENV
 
+      - name: Verify APK exists
+        run: |
+          ls "$GITHUB_WORKSPACE/app/build/outputs/apk/qa/app-qa.apk"
 
 
       - name: Decode Google Service Account
@@ -79,6 +82,7 @@ jobs:
           firebase appdistribution:distribute "${{ inputs.apk_path }}app-${{ env.variant_lowercase }}.apk" \
           --app "${{ env.app_id }}" \
           --groups "testers"
+          --debug
 
       - name: Verify Service Account JSON
         run:
