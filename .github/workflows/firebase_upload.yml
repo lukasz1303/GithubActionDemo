@@ -76,8 +76,6 @@ jobs:
 
       - name: Decode Google Service Account
         run:
-          echo "GOOGLE_APPLICATION_CREDENTIALS=${{ secrets.CREDENTIAL_FILE_CONTENT }}"
-          echo "GOOGLE_APPLICATION_CREDENTIALS=${{ secrets.CREDENTIAL_FILE_CONTENT }}" >> $GITHUB_ENV
           firebase appdistribution:distribute "${{ inputs.apk_path }}app-${{ env.variant_lowercase }}.apk" \
           --app "${{ env.app_id }}" \
           --groups "testers"
