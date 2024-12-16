@@ -75,8 +75,7 @@ jobs:
         run: |
           firebase appdistribution:distribute "${{ inputs.apk_path }}/app-${{ env.variant_lowercase }}.apk" \
             --app "${{ env.app_id }}" \
-            --groups "testers" \
-            --token "$(firebase appdistribution:token)"
+            --groups "testers"
         env:
           GOOGLE_APPLICATION_CREDENTIALS: $HOME/service-account.json
 
