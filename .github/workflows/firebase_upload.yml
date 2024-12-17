@@ -68,8 +68,10 @@ jobs:
 
       - name: Install Bundler and dependencies
         run: |
+          export GEM_HOME=$HOME/gems
+          export PATH=$GEM_HOME/bin:$PATH
           gem install bundler
-          bundle install
+          bundle install --path vendor/bundle
         working-directory: ./fastlane
 
       - name: Load Firebase Service Account
