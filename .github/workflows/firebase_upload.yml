@@ -63,13 +63,20 @@ jobs:
       - name: Install Ruby
         run: |
           sudo apt-get update
-          sudo apt-get install ruby-full
+          sudo apt-get install -y ruby-full
           ruby -v
 
-      - name: Install Bundler and dependencies
+      - name: Configure local gem directory
         run: |
-          gem install bundler
-          bundle install --path vendor/bundle
+          echo "GEM_HOME=$HOME/gems" >> $GITHUB_ENV
+          echo "BUNDLE_PATH=$HOME/gems" >> $GITHUB_ENV
+          echo "PATH=$HOME/gems/bin:$PATH" >> $GITHUB_ENV
+
+      - name: Install Bundler
+        run: gem install bundler
+
+      - name: Install dependencies
+        run: bundle install --path vendor/bundle
         working-directory: ./fastlane
 
       - name: Load Firebase Service Account
