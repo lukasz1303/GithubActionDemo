@@ -111,7 +111,7 @@ jobs:
 
 
       - name: List APK file4
-        run: ls -l ${{ steps.find_file.outputs.folder_path }} \
+        run: ls -l ${{ steps.find_file.outputs.file_path }} \
 
 
       - name: Distribute APK to Firebase App Distribution via Fastlane
