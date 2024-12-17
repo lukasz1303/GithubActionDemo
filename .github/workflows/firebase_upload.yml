@@ -60,6 +60,16 @@ jobs:
               ;;
           esac
 
+      - name: Find apk file path
+        id: find_file
+        run: |
+          FILE_PATH=$(find . -type f -name '*${{ env.variant_lowercase }}.apk'  | head -n 1)
+          if [[ -z "$FILE_PATH" ]]; then
+            echo "No APK file found"
+            exit 1
+          fi
+          echo "file_path=$FILE_PATH" >> $GITHUB_OUTPUT
+
       - name: Install Ruby
         run: |
           sudo apt-get update
@@ -94,7 +104,7 @@ jobs:
         run: |
           bundle exec fastlane run firebase_app_distribution \
             app:"${{ env.app_id }}" \
-            apk_path:$GITHUB_WORKSPACE/app/build/outputs/apk/qa/app-qa.apk \
+            apk_path: "$GITHUB_WORKSPACE/${{ steps.find_file.outputs.file_path }}" \
             groups:"testers"
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ env.GOOGLE_APPLICATION_CREDENTIALS }}
