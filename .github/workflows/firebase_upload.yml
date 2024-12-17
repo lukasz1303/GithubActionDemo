@@ -63,13 +63,12 @@ jobs:
       - name: Find apk file path
         id: find_file
         run: |
-          FILE_PATH=$(find . -type f -name '*${{ env.variant_lowercase }}.apk'  | head -n 1)
+          FILE_PATH=$(find . -type f -name '*${{ env.variant_lowercase }}.apk'  | head -n 1 | sed 's|^./||')
           if [[ -z "$FILE_PATH" ]]; then
             echo "No APK file found"
             exit 1
           fi
-          FILE_PATH_2="$FILE_PATH" | sed 's|^\./||')
-          echo "file_path=FILE_PATH_2" >> $GITHUB_OUTPUT
+          echo "file_path=$FILE_PATH" >> $GITHUB_OUTPUT
 
       - name: List APK file3
         run: ls -l ${{ steps.find_file.outputs.file_path }}
