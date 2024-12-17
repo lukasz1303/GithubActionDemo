@@ -100,6 +100,19 @@ jobs:
       - name: List APK file
         run: ls -l app/build/outputs/apk/qa/app-qa.apk
 
+      - name: List APK file2
+        run: ls -l $GITHUB_WORKSPACE
+        working-directory: ./fastlane
+
+      - name: List APK file3
+        run: ls -l ${{ steps.find_file.outputs.file_path }}
+        working-directory: ./fastlane
+
+      - name: List APK file4
+        run: ls -l ${{ steps.find_file.outputs.file_path }} \
+        working-directory: ./fastlane
+
+
       - name: Distribute APK to Firebase App Distribution via Fastlane
         run: |
           bundle exec fastlane run firebase_app_distribution \
