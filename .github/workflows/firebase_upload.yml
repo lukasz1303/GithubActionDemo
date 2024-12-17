@@ -68,8 +68,6 @@ jobs:
 
       - name: Install Bundler and dependencies
         run: |
-          echo "GEM_HOME=${GITHUB_WORKSPACE}/gems" >> $GITHUB_ENV
-          echo "${GITHUB_WORKSPACE}/gems/bin:$PATH" >> $GITHUB_ENV
           gem install bundler
           bundle install --path vendor/bundle
         working-directory: ./fastlane
