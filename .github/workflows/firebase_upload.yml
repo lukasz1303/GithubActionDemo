@@ -108,21 +108,14 @@ jobs:
         working-directory: ./fastlane
 
 
-
-      - name: List APK file4
-        run: ls -l ${{ steps.find_file.outputs.file_path }} \
-        working-directory: ./fastlane
-
-
       - name: Distribute APK to Firebase App Distribution via Fastlane
         run: |
           bundle exec fastlane run firebase_app_distribution \
             app:"${{ env.app_id }}" \
-            apk_path: "$GITHUB_WORKSPACE/${{ steps.find_file.outputs.file_path }}" \
+            apk_path: ${{ steps.find_file.outputs.file_path }} \
             groups:"testers"
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ env.GOOGLE_APPLICATION_CREDENTIALS }}
-        working-directory: ./fastlane
 
 #      - name: Upload APK to Firebase App Distribution
 #        uses: wzieba/Firebase-Distribution-Github-Action@v1
