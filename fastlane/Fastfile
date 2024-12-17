@@ -4,6 +4,6 @@ lane :distribute_to_firebase do |options|
     testers: "testers",
     release_notes: "Automated release notes",
     apk_path: options[:apk_path],
-    service_credentials_file: ENV["GOOGLE_APPLICATION_CREDENTIALS"] # Odczytanie zmiennej środowiskowej
+    service_credentials_file: ENV["GOOGLE_APPLICATION_CREDENTIALS"]
   )
 end
