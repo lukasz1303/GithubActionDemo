@@ -68,8 +68,8 @@ jobs:
           echo "No APK file found"
           exit 1
           fi
-          FOLDER_PATH=$(dirname "$FILE_PATH" | sed 's|^\./||')
-          echo "folder_path=$FOLDER_PATH" >> $GITHUB_OUTPUT
+          FILE_PATH_2=$(dirname "$FILE_PATH" | sed 's|^\./||')
+          echo "folder_path=$FILE_PATH_2" >> $GITHUB_OUTPUT
       - name: List APK file3
         run: ls -l ${{ steps.find_file.outputs.file_path }}
 
@@ -118,7 +118,7 @@ jobs:
         run: |
           bundle exec fastlane run firebase_app_distribution \
             app:"${{ env.app_id }}" \
-            apk_path: $GITHUB_WORKSPACE/app/build/outputs/apk/qa/app-qa.apk \
+            apk_path: $GITHUB_WORKSPACE/${{ steps.find_file.outputs.folder_path }} \
             groups:"testers"
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ env.GOOGLE_APPLICATION_CREDENTIALS }}
