@@ -26,7 +26,9 @@ on:
 jobs:
   upload:
     runs-on: ubuntu-latest
-
+    env:
+      GEM_HOME: ${{ github.workspace }}/gems
+      PATH: ${{ github.workspace }}/gems/bin:$PATH
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -68,8 +70,6 @@ jobs:
 
       - name: Install Bundler and dependencies
         run: |
-          export GEM_HOME=$HOME/gems
-          export PATH=$GEM_HOME/bin:$PATH
           gem install bundler
           bundle install --path vendor/bundle
         working-directory: ./fastlane
