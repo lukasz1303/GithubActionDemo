@@ -101,9 +101,10 @@ jobs:
           bundle exec fastlane distribute_to_firebase \
             app_id:"${{ env.app_id }}" \
             apk_path:$GITHUB_WORKSPACE/${{ steps.find_file.outputs.file_path }} \
-            release_notes: '${{ github.head_ref || github.ref_name }}'
+            release_notes:$RELEASE_NOTES
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ env.GOOGLE_APPLICATION_CREDENTIALS }}
+          RELEASE_NOTES: ${{ github.head_ref || github.ref_name }}
         working-directory: ./fastlane
 #      - name: Upload APK to Firebase App Distribution
 #        uses: wzieba/Firebase-Distribution-Github-Action@v1
