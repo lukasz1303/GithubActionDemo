@@ -101,6 +101,7 @@ jobs:
           bundle exec fastlane distribute_to_firebase \
             app_id:"${{ env.app_id }}" \
             apk_path:$GITHUB_WORKSPACE/${{ steps.find_file.outputs.file_path }} \
+            release_notes: ${{ github.head_ref || github.ref_name }} \
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ env.GOOGLE_APPLICATION_CREDENTIALS }}
         working-directory: ./fastlane
