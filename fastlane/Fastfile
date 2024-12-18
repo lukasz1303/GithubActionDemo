@@ -1,7 +1,7 @@
 lane :distribute_to_firebase do |options|
   firebase_app_distribution(
     app: options[:app_id],
-    testers: "testers",
+    groups: "testers",
     release_notes: "Automated release notes",
     apk_path: options[:apk_path],
     service_credentials_file: ENV["GOOGLE_APPLICATION_CREDENTIALS"]
