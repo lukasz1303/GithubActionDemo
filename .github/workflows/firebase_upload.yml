@@ -116,7 +116,7 @@ jobs:
 
       - name: Distribute APK to Firebase App Distribution via Fastlane
         run: |
-          bundle exec fastlane run firebase_app_distribution \
+          bundle exec fastlane distribute_to_firebase \
             app:"${{ env.app_id }}" \
             apk_path:$GITHUB_WORKSPACE/${{ steps.find_file.outputs.file_path }} \
         env:
