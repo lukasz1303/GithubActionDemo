@@ -16,7 +16,9 @@ android {
         applicationId "com.example.githubactionsdemo"
         minSdk 28
         targetSdk 34
-        versionCode 1
+        if (System.getenv("BUILD_NUMBER") != null) {
+            versionCode System.getenv("BUILD_NUMBER") as Integer
+        }
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

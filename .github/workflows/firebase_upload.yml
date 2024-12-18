@@ -60,10 +60,56 @@ jobs:
               ;;
           esac
 
-      - name: Upload APK to Firebase App Distribution
-        uses: wzieba/Firebase-Distribution-Github-Action@v1
-        with:
-          appId: ${{ env.app_id }}
-          serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
-          groups: testers
-          file: ${{ inputs.apk_path }}/app-${{ env.variant_lowercase }}.apk
+      - name: Find apk file path
+        id: find_file
+        run: |
+          FILE_PATH=$(find . -type f -name '*${{ env.variant_lowercase }}.apk'  | head -n 1 | sed 's|^./||')
+          if [[ -z "$FILE_PATH" ]]; then
+            echo "No APK file found"
+            exit 1
+          fi
+          echo "file_path=$FILE_PATH" >> $GITHUB_OUTPUT
+
+      - name: Install Ruby
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ruby-full
+          ruby -v
+
+      - name: Configure local gem directory
+        run: |
+          echo "GEM_HOME=$HOME/gems" >> $GITHUB_ENV
+          echo "BUNDLE_PATH=$HOME/gems" >> $GITHUB_ENV
+          echo "PATH=$HOME/gems/bin:$PATH" >> $GITHUB_ENV
+
+      - name: Install Bundler
+        run: gem install bundler
+
+      - name: Install dependencies
+        run: bundle install --path vendor/bundle
+        working-directory: ./fastlane
+
+      - name: Load Firebase Service Account
+        run: |
+          echo "$CREDENTIAL_FILE_CONTENT" > "$HOME/service-account.json"
+          echo "GOOGLE_APPLICATION_CREDENTIALS=$HOME/service-account.json" >> $GITHUB_ENV
+        env:
+          CREDENTIAL_FILE_CONTENT: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
+
+      - name: Distribute APK to Firebase App Distribution via Fastlane
+        run: |
+          bundle exec fastlane distribute_to_firebase \
+            app_id:"${{ env.app_id }}" \
+            apk_path:$GITHUB_WORKSPACE/${{ steps.find_file.outputs.file_path }} \
+            release_notes:$RELEASE_NOTES
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ env.GOOGLE_APPLICATION_CREDENTIALS }}
+          RELEASE_NOTES: ${{ github.head_ref || github.ref_name }}
+        working-directory: ./fastlane
+#      - name: Upload APK to Firebase App Distribution
+#        uses: wzieba/Firebase-Distribution-Github-Action@v1
+#        with:
+#          appId: ${{ env.app_id }}
+#          serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
+#          groups: testers
+#          file: ${{ inputs.apk_path }}/app-${{ env.variant_lowercase }}.apk
