@@ -70,10 +70,6 @@ jobs:
           fi
           echo "file_path=$FILE_PATH" >> $GITHUB_OUTPUT
 
-      - name: List APK file3
-        run: ls -l ${{ steps.find_file.outputs.file_path }}
-
-
       - name: Install Ruby
         run: |
           sudo apt-get update
@@ -100,24 +96,10 @@ jobs:
         env:
           CREDENTIAL_FILE_CONTENT: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
 
-
-      - name: List APK file
-        run: ls -l app/build/outputs/apk/qa/app-qa.apk
-
-      - name: List APK file2
-        run: ls -l $GITHUB_WORKSPACE
-        working-directory: ./fastlane
-
-
-
-      - name: List APK file4
-        run: ls -l ${{ steps.find_file.outputs.file_path }} \
-
-
       - name: Distribute APK to Firebase App Distribution via Fastlane
         run: |
           bundle exec fastlane distribute_to_firebase \
-            app:"${{ env.app_id }}" \
+            app_id:"${{ env.app_id }}" \
             apk_path:$GITHUB_WORKSPACE/${{ steps.find_file.outputs.file_path }} \
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ env.GOOGLE_APPLICATION_CREDENTIALS }}
